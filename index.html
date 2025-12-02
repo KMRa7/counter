@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>お札・硬貨カウンター</title>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      padding: 20px;
+    }
+    table {
+      border-collapse: collapse;
+      width: 320px;
+      max-width: 100%;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 6px 8px;
+      text-align: right;
+    }
+    th:first-child, td:first-child {
+      text-align: left;
+    }
+    input[type="number"] {
+      width: 80px;
+      text-align: right;
+    }
+    tfoot td {
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>金額自動計算ツール</h1>
+  <p>枚数を入力すると自動で合計金額を計算します。</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>金種</th>
+        <th>枚数</th>
+        <th>小計 (円)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr data-value="10">
+        <td>10円</td>
+        <td><input class="count" type="number" min="0"></td>
+        <td class="subtotal">0</td>
+      </tr>
+      <tr data-value="50">
+        <td>50円</td>
+        <td><input class="count" type="number" min="0"></td>
+        <td class="subtotal">0</td>
+      </tr>
+      <tr data-value="100">
+        <td>100円</td>
+        <td><input class="count" type="number" min="0"></td>
+        <td class="subtotal">0</td>
+      </tr>
+      <tr data-value="1000">
+        <td>1,000円</td>
+        <td><input class="count" type="number" min="0"></td>
+        <td class="subtotal">0</td>
+      </tr>
+      <tr data-value="5000">
+        <td>5,000円</td>
+        <td><input class="count" type="number" min="0"></td>
+        <td class="subtotal">0</td>
+      </tr>
+      <tr data-value="10000">
+        <td>10,000円</td>
+        <td><input class="count" type="number" min="0"></td>
+        <td class="subtotal">0</td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td colspan="2">合計</td>
+        <td id="total">0</td>
+      </tr>
+    </tfoot>
+  </table>
+
+  <script>
+    function calc() {
+      let total = 0;
+
+      document.querySelectorAll('tbody tr[data-value]').forEach(row => {
+        const value = Number(row.dataset.value);
+        const input = row.querySelector('.count');
+        const count = Number(input.value) || 0;   // 空欄なら 0 になる
+        const subtotal = value * count;
+
+        row.querySelector('.subtotal').textContent =
+          subtotal.toLocaleString('ja-JP');
+        total += subtotal;
+      });
+
+      document.getElementById('total').textContent =
+        total.toLocaleString('ja-JP');
+    }
+
+    document.querySelectorAll('.count').forEach(input => {
+      input.addEventListener('input', calc);
+    });
+
+    calc();
+  </script>
+</body>
+</html>
